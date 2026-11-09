@@ -1,0 +1,5 @@
+/* Small storefront-specific overrides layered on top of Bootstrap 5. */
+.product-card img { height: 220px; object-fit: cover; }
+.price-strike { text-decoration: line-through; color: #999; font-size: 0.9em; }
+.badge-sale { background-color: #dc3545; }
+.rating-stars { color: #f5b301; }
