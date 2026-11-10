@@ -1,0 +1,39 @@
+<form method="get" class="card p-3 mb-4">
+    <h6 class="mb-3">Filters</h6>
+    {% if request.GET.q %}<input type="hidden" name="q" value="{{ request.GET.q }}">{% endif %}
+    <div class="mb-3">
+        <label class="form-label small">Sort by</label>
+        {{ filter.form.sort }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label small">Department</label>
+        {{ filter.form.department }}
+    </div>
+    <div class="mb-3">
+        <label class="form-label small">Category</label>
+        {{ filter.form.category }}
+    </div>
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label small">Min price</label>
+            {{ filter.form.min_price }}
+        </div>
+        <div class="col">
+            <label class="form-label small">Max price</label>
+            {{ filter.form.max_price }}
+        </div>
+    </div>
+    <div class="mb-3">
+        <label class="form-label small">Min rating</label>
+        {{ filter.form.min_rating }}
+    </div>
+    <div class="form-check mb-2">
+        {{ filter.form.in_stock_only }}
+        <label class="form-check-label small" for="id_in_stock_only">In stock only</label>
+    </div>
+    <div class="form-check mb-3">
+        {{ filter.form.on_sale_only }}
+        <label class="form-check-label small" for="id_on_sale_only">On sale only</label>
+    </div>
+    <button type="submit" class="btn btn-dark btn-sm w-100">Apply Filters</button>
+</form>

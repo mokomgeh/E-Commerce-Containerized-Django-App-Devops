@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item"><a href="{{ product.department.get_absolute_url }}">{{ product.department.name }}</a></li>
+        <li class="breadcrumb-item"><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
+        <li class="breadcrumb-item active">{{ product.name }}</li>
+    </ol>
+</nav>
+
+<div class="row mb-5">
+    <div class="col-md-5">
+        {% with image=product.get_primary_image %}
+        {% if image %}
+            <img src="{{ image.image.url }}" class="img-fluid rounded" alt="{{ image.alt_text|default:product.name }}">
+        {% else %}
+            <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" style="height:350px;">No image</div>
+        {% endif %}
+        {% endwith %}
+        {% if product.images.count > 1 %}
+        <div class="d-flex gap-2 mt-2">
+            {% for img in product.images.all %}
+                <img src="{{ img.image.url }}" class="rounded" style="width:60px;height:60px;object-fit:cover;">
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-7">
+        <h1 class="h3">{{ product.name }}</h1>
+        <p class="text-muted">SKU: {{ product.sku }}</p>
+        {% if product.review_count %}
+            <div class="rating-stars mb-2">★ {{ product.average_rating }} <span class="text-muted">({{ product.review_count }} reviews)</span></div>
+        {% endif %}
+
+        <div class="mb-3 fs-4">
+            {% if product.is_on_sale %}
+                <span class="fw-bold text-danger">${{ product.discount_price }}</span>
+                <span class="price-strike ms-2">${{ product.price }}</span>
+                <span class="badge badge-sale ms-2">-{{ product.discount_percent }}%</span>
+            {% else %}
+                <span class="fw-bold">${{ product.price }}</span>
+            {% endif %}
+        </div>
+
+        <p>{{ product.short_description }}</p>
+
+        {% if product.in_stock %}
+            <p class="text-success small">✔ In stock ({{ product.stock_quantity }} available)</p>
+            
+        {% else %}
+            <p class="text-danger small">✘ Out of stock</p>
+        {% endif %}
+
+        {% if product.specifications.all %}
+        <h6 class="mt-4">Specifications</h6>
+        <table class="table table-sm">
+            <tbody>
+            {% for spec in product.specifications.all %}
+                <tr><th class="text-muted" style="width:40%">{{ spec.name }}</th><td>{{ spec.value }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        {% if product.description %}
+        <h6 class="mt-4">Description</h6>
+        <p>{{ product.description|linebreaks }}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if frequently_bought_together %}
+<h2 class="h5 mb-3">Frequently Bought Together</h2>
+<div class="row mb-5">
+    {% for p in frequently_bought_together %}
+        {% with product=p %}{% include "partials/product_card.html" %}{% endwith %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if related_products %}
+<h2 class="h5 mb-3">You May Also Like</h2>
+<div class="row mb-5">
+    {% for p in related_products %}
+        {% with product=p %}{% include "partials/product_card.html" %}{% endwith %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if recently_viewed %}
+<h2 class="h5 mb-3">Recently Viewed</h2>
+<div class="row mb-5">
+    {% for p in recently_viewed %}
+        {% with product=p %}{% include "partials/product_card.html" %}{% endwith %}
+    {% endfor %}
+</div>
+{% endif %}
+
+<h2 class="h5 mb-3">Reviews</h2>
+{% for review in product.reviews.all %}
+    <div class="border-bottom py-2">
+        <strong>{{ review.rating }}★ {{ review.title }}</strong> — <span class="text-muted small">{{ review.user }}</span>
+        <p class="mb-0">{{ review.comment }}</p>
+    </div>
+{% empty %}
+    <p class="text-muted">No reviews yet.</p>
+{% endfor %}
+{% endblock %}

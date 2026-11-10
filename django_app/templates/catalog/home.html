@@ -1,5 +1,42 @@
 {% extends "base.html" %}
 {% block title %}Storefront — Home{% endblock %}
 {% block content %}
-home page
+<div class="p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-6">Welcome to the Storefront</h1>
+    <p class="lead">A demo Django e-commerce catalog with real search, recommendations, and Stripe test-mode checkout.</p>
+    <a class="btn btn-primary" href="{% url 'catalog:product_search' %}">Browse all products</a>
+</div>
+
+<h2 class="h4 mb-3">Departments</h2>
+<div class="row mb-5">
+    {% for d in departments %}
+    <div class="col-md-3 mb-3">
+        <a href="{{ d.get_absolute_url }}" class="text-decoration-none">
+            <div class="card text-center p-3 h-100">
+                <div class="fw-bold">{{ d.name }}</div>
+            </div>
+        </a>
+    </div>
+    {% empty %}
+    <p class="text-muted">No departments yet — add some in the admin.</p>
+    {% endfor %}
+</div>
+
+{% if featured_products %}
+<h2 class="h4 mb-3">Featured Products</h2>
+<div class="row">
+    {% for product in featured_products %}
+        {% include "partials/product_card.html" %}
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if trending_products %}
+<h2 class="h4 mb-3 mt-4">Trending Now</h2>
+<div class="row">
+    {% for product in trending_products %}
+        {% include "partials/product_card.html" %}
+    {% endfor %}
+</div>
+{% endif %}
 {% endblock %}

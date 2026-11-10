@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Search Results{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">
+    {{ category.name }}
+    <span class="text-muted fs-6">({{ page_obj.paginator.count }} found)</span>
+</h1>
+<div class="row">
+    <div class="col-md-3">{% include "partials/filter_sidebar.html" %}</div>
+    <div class="col-md-9">
+        <div class="row">
+            {% for product in products %}
+                {% include "partials/product_card.html" %}
+            {% empty %}
+                <p class="text-muted">No products matched your search/filters.</p>
+            {% endfor %}
+        </div>
+        {% include "partials/pagination.html" %}
+    </div>
+</div>
+{% endblock %}

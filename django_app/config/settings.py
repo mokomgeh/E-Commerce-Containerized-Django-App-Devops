@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Third-party
+    'django_filters',
     # Local apps
     'apps.accounts',
     'apps.catalog',
@@ -64,6 +66,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                 # Injects `departments_nav` into every template's context.
+                "apps.catalog.context_processors.departments_nav",
             ],
         },
     },
