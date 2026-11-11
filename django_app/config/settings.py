@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     # Local apps
     'apps.accounts',
     'apps.catalog',
+    'apps.cart',
+    'apps.search',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +68,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                 # Injects `departments_nav` into every template's context.
+                # Injects `cart` into every template's context.
+                "apps.cart.context_processors.cart",
+                # Injects `departments_nav` into every template's context.
                 "apps.catalog.context_processors.departments_nav",
             ],
         },
@@ -132,6 +136,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+# ---------------------------------------------------------------------------
+# django-filter
+# ---------------------------------------------------------------------------
+FILTERS_EMPTY_CHOICE_LABEL = "All"
 
 
 # Email

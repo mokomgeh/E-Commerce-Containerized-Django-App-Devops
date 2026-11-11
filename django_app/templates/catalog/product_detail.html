@@ -48,7 +48,12 @@
 
         {% if product.in_stock %}
             <p class="text-success small">✔ In stock ({{ product.stock_quantity }} available)</p>
-            
+            <form action="{% url 'cart:cart_add' product.id %}" method="post" class="d-flex gap-2 mb-4">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="form-control" style="width:90px;">
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
         {% else %}
             <p class="text-danger small">✘ Out of stock</p>
         {% endif %}
