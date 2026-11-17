@@ -21,8 +21,20 @@
                         🛒 Cart <span class="badge bg-primary">{{ cart|length }}</span>
                     </a>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Sign Up</a></li>
+                {% if user.is_authenticated %}
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ user.username }}</a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="{% url 'orders:order_list' %}">My Orders</a></li>
+                        <li><a class="dropdown-item" href="{% url 'accounts:address_list' %}">My Addresses</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                    </ul>
+                </li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}My Addresses{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">My Addresses</h1>
+<a href="{% url 'accounts:address_create' %}" class="btn btn-primary btn-sm mb-3">Add Address</a>
+<div class="row">
+{% for address in addresses %}
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <p class="mb-1"><strong>{{ address.full_name }}</strong> {% if address.is_default %}<span class="badge bg-success">Default</span>{% endif %}</p>
+            <p class="small text-muted mb-1">{{ address.get_address_type_display }}</p>
+            <p class="mb-2">{{ address.address_line_1 }}<br>{{ address.city }}, {{ address.state_province }} {{ address.postal_code }}<br>{{ address.country }}</p>
+            <div class="d-flex gap-2">
+                <a href="{% url 'accounts:address_update' address.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                <a href="{% url 'accounts:address_delete' address.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+{% empty %}
+    <p class="text-muted">No addresses saved yet.</p>
+{% endfor %}
+</div>
+{% endblock %}

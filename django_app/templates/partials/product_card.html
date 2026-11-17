@@ -21,7 +21,7 @@
             {% endif %}
             <div class="mt-auto">
                 {% if product.in_stock %}
-                <form action="#" method="post">
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="quantity" value="1">
                     <input type="hidden" name="next" value="{{ request.path }}">
