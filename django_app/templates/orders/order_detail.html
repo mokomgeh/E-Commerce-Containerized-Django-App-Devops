@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Order {{ order.order_number }}{% endblock %}
+{% block content %}
+<h1 class="h4 mb-3">Order #{{ order.order_number|stringformat:"s"|slice:":8" }}</h1>
+<p>Status: <span class="badge bg-info text-dark">{{ order.get_status_display }}</span></p>
+<table class="table">
+    <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Line Total</th></tr></thead>
+    <tbody>
+    {% for item in order.items.all %}
+        <tr><td>{{ item.product_name }}</td><td>{{ item.quantity }}</td><td>${{ item.unit_price }}</td><td>${{ item.line_total }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="text-end">
+    <p>Subtotal: ${{ order.subtotal }}</p>
+    {% if order.discount_amount %}<p>Discount: -${{ order.discount_amount }}</p>{% endif %}
+    <p>Shipping: ${{ order.shipping_cost }}</p>
+    <h5>Total: ${{ order.total }}</h5>
+</div>
+
+{% if order.shipping_address %}
+<h6 class="mt-4">Shipping to</h6>
+<p>{{ order.shipping_address.full_name }}<br>{{ order.shipping_address.address_line_1 }}<br>{{ order.shipping_address.city }}, {{ order.shipping_address.state_province }} {{ order.shipping_address.postal_code }}<br>{{ order.shipping_address.country }}</p>
+{% endif %}
+
+{% if order.status == "pending" %}
+<a href="{% url 'payments:checkout' order.order_number %}" class="btn btn-primary">Complete Payment</a>
+{% endif %}
+{% endblock %}

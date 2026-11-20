@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Address{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">Checkout: Your Details</h1>
+<p class="text-muted">Checking out as a guest. <a href="{% url 'login' %}?next={{ request.path }}">Log in</a> to use a saved address instead.</p>
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control" required>
+    </div>
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-2">Continue to Review</button>
+</form>
+{% endblock %}

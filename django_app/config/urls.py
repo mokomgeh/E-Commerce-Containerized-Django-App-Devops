@@ -53,6 +53,7 @@ urlpatterns = [
     path("cart/", include("apps.cart.urls")),
     path("coupons/", include("apps.coupons.urls")),
     path("search/", include("apps.search.urls")),
+    path("orders/", include("apps.orders.urls")),
     
     path("", include("apps.catalog.urls")),
 ]

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Review{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">Review Your Order</h1>
+<table class="table">
+    <thead><tr><th>Product</th><th>Qty</th><th>Subtotal</th></tr></thead>
+    <tbody>
+    {% for item in cart %}
+        <tr><td>{{ item.product.name }}</td><td>{{ item.quantity }}</td><td>${{ item.subtotal }}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div class="row">
+    <div class="col-md-6">
+        <h6>Have a coupon?</h6>
+        {% if coupon %}
+            <p>Applied: <strong>{{ coupon.code }}</strong> (-${{ discount }})
+                <a href="{% url 'coupons:remove_coupon' %}" class="small ms-2">remove</a>
+            </p>
+        {% else %}
+        <form method="post" class="d-flex gap-2">
+            {% csrf_token %}
+            {{ coupon_form.code }}
+            <button type="submit" name="apply_coupon" class="btn btn-outline-secondary">Apply</button>
+        </form>
+        {% endif %}
+    </div>
+    <div class="col-md-6 text-end">
+        <p>Subtotal: ${{ cart.total_price }}</p>
+        {% if discount %}<p>Discount: -${{ discount }}</p>{% endif %}
+        <h5>Total: ${{ total }}</h5>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="place_order" class="btn btn-primary btn-lg">Place Order &amp; Pay</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

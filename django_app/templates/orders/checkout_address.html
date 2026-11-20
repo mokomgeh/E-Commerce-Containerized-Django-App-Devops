@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Checkout — Address{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">Checkout: Choose Addresses</h1>
+<form method="post">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md-6">
+            <h6>Billing Address</h6>
+            {% for a in addresses %}
+            <div class="form-check border rounded p-2 mb-2">
+                <input class="form-check-input" type="radio" name="billing_address" value="{{ a.id }}" id="bill{{ a.id }}" {% if a.address_type == 'billing' and a.is_default %}checked{% endif %}>
+                <label class="form-check-label" for="bill{{ a.id }}">{{ a.full_name }} — {{ a.address_line_1 }}, {{ a.city }}, {{ a.country }}</label>
+            </div>
+            {% empty %}
+            <p class="text-muted">No saved addresses. <a href="{% url 'accounts:address_create' %}">Add one</a>.</p>
+            {% endfor %}
+        </div>
+        <div class="col-md-6">
+            <h6>Shipping Address</h6>
+            {% for a in addresses %}
+            <div class="form-check border rounded p-2 mb-2">
+                <input class="form-check-input" type="radio" name="shipping_address" value="{{ a.id }}" id="ship{{ a.id }}" {% if a.address_type == 'shipping' and a.is_default %}checked{% endif %}>
+                <label class="form-check-label" for="ship{{ a.id }}">{{ a.full_name }} — {{ a.address_line_1 }}, {{ a.city }}, {{ a.country }}</label>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Continue to Review</button>
+</form>
+{% endblock %}
