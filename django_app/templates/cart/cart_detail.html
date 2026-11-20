@@ -36,7 +36,7 @@
     </tfoot>
 </table>
 <div class="text-end">
-    <a href="#" class="btn btn-primary">Proceed to Checkout</a>
+    <a href="{% url 'orders:checkout_address' %}" class="btn btn-primary">Proceed to Checkout</a>
 </div>
 {% endif %}
 {% endblock %}

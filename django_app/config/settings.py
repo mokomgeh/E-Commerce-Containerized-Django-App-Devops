@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.search',
     'apps.coupons',
     'apps.orders',
+    'apps.payments',
 ]
 
 MIDDLEWARE = [
@@ -144,6 +145,21 @@ MEDIA_ROOT = BASE_DIR / "media"
 # ---------------------------------------------------------------------------
 FILTERS_EMPTY_CHOICE_LABEL = "All"
 
+
+# ---------------------------------------------------------------------------
+# Stripe payments (Test mode by default -- see apps/payments/services.py)
+# ---------------------------------------------------------------------------
+STRIPE_SECRET_KEY = 'INSERT YOUR OWN'
+STRIPE_PUBLISHABLE_KEY = 'INSERT YOUR OWN'
+STRIPE_WEBHOOK_SECRET = 'INSERT YOUR OWN'
+
+
+# ---------------------------------------------------------------------------
+# Email (console backend for dev -- order confirmations print to the
+# terminal instead of actually sending, until SMTP vars are configured)
+# ---------------------------------------------------------------------------
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'INSERT YOUR OWN'
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration

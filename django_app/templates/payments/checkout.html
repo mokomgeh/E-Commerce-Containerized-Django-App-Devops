@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Payment{% endblock %}
+{% block content %}
+<h1 class="h4 mb-4">Payment for Order #{{ order.order_number|stringformat:"s"|slice:":8" }}</h1>
+<p>Total due: <strong>${{ order.total }}</strong></p>
+
+{% if config_error %}
+    <div class="alert alert-warning">
+        <strong>Stripe isn't configured yet.</strong> {{ config_error }}
+    </div>
+{% else %}
+<!--
+    Stripe "Payment Element": a hosted widget that renders its own PCI-
+    compliant card/wallet fields inside an iframe. We never see or touch
+    raw card numbers -- Stripe confirms the PaymentIntent client-side and
+    redirects here (return_url) with a payment_intent id, which our
+    server then re-verifies against the Stripe API before marking
+    anything as paid (see apps/payments/views.payment_return).
+-->
+<form id="payment-form">
+    <div id="payment-element"></div>
+    <button id="submit-button" class="btn btn-primary mt-3" type="submit">Pay ${{ order.total }}</button>
+    <div id="payment-message" class="text-danger mt-2"></div>
+</form>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe("{{ publishable_key }}");
+    const elements = stripe.elements({ clientSecret: "{{ client_secret }}" });
+    const paymentElement = elements.create("payment");
+    paymentElement.mount("#payment-element");
+
+    const form = document.getElementById("payment-form");
+    const submitButton = document.getElementById("submit-button");
+    const messageBox = document.getElementById("payment-message");
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        submitButton.disabled = true;
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: "{{ return_url }}",
+            },
+        });
+
+        // confirmPayment only returns here if there's an immediate error
+        // (e.g. invalid card details) -- on success, the browser has
+        // already navigated to return_url before this code would run.
+        if (error) {
+            messageBox.textContent = error.message;
+            submitButton.disabled = false;
+        }
+    });
+</script>
+{% endif %}
+{% endblock %}
